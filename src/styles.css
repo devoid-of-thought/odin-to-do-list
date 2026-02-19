@@ -83,3 +83,9 @@ h6 {
   --secondary-color: #801a86;
   --accent-color: #e768f3;
 }
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background-color: var(--far-background-color);
+  color: var(--primary-color);
+}
