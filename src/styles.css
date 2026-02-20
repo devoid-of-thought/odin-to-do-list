@@ -88,4 +88,190 @@ body {
   font-family: 'Space Grotesk', sans-serif;
   background-color: var(--far-background-color);
   color: var(--primary-color);
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+}
+div.sidebar {
+  background-color: var(--primary-color);
+  padding: 1rem;
+  color: var(--close-background-color);
+  grid-row: 1 /3;
+  grid-column: 1;
+}
+header {
+  background-color: var(--secondary-color);
+  padding: 1rem;
+  color: var(--close-background-color);
+  grid-row: 1;
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+}
+#content {
+  padding: 1rem;
+  grid-row: 2;
+  grid-column: 2;
+}
+
+div.sidebar h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+div.sidebar p {
+  font-size: 2rem;
+  margin-bottom: 0rem;
+}
+div.sidebar ul {
+  list-style: none;
+  padding: 1rem;
+}
+div.sidebar ul li {
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-left: 5px solid white;
+}
+div.sidebar ul li:hover {
+  border-left: 5px solid var(--accent-color);
+  background-color: var(--secondary-color);
+}
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+.large-icon {
+  font-size: 3rem;
+}
+button {
+  height: 4rem;
+  font-size: 1.2rem;
+  padding: 1rem 2rem;
+  margin: 0.5rem;
+  background-color: var(--primary-color);
+  color: var(--close-background-color);
+  border: none;
+  cursor: pointer;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+button:hover {
+      background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--close-background-color);
+    transform: translateY(-7px);
+    box-shadow: 0 10px 15px rgba(128, 26, 134, 0.3);
+}
+
+#project-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
+  background-color: var(--close-background-color);
+  padding: 1rem;
+  
+}
+#project-header {
+  grid-column: 1 / -1;
+  grid-row: 1/2;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 2rem;
+  margin-bottom: 0.5rem;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+}
+#project-header #project-title {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+#project-header #project-description {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+
+} 
+#project-header #project-due-date {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  justify-self: end;
+}
+#tasks-container{
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+.task-group {
+  background-color: var(--far-background-color);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 300px;
+}
+.task-group ul {
+  list-style: none;
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+}
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.custom-checkbox .checkmark {
+  position: relative;
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border: 2px solid var(--primary-color, #020100);
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-checkbox:hover input ~ .checkmark {
+  background-color: var(--close-background-color, #eeeeee);
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: var(--secondary-color, #801a86);
+  border-color: var(--secondary-color, #801a86);
+}
+
+.custom-checkbox .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 11px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
 }
