@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "title": "To-Do List Template",
+    "description": "A template for a to-do list application.",
+    "due_date": "2026-03-01",
+    "priority": "High"
+  },
+  "task_groups": [
+    {
+      "name": "Group 1",
+      "tasks": [
+        {
+          "id": 1,
+          "name": "Task 1",
+          "description": "This is a sample task description.",
+          "due_date": "2026-03-01",
+          "priority": "High",
+          "notes": [
+            "Note 1 for Task 1"
+          ],
+          "completed": false
+        },
+        {
+          "id": 2,
+          "name": "Task 2",
+          "description": "This is another sample task description.",
+          "due_date": "2026-03-05",
+          "priority": "Medium",
+          "notes": [
+          ],
+          "completed": false
+        }
+      ]
+    },
+    {
+        "name": "Group 2",
+        "tasks": [
+            {
+            "id": 3,
+            "name": "Task 3",
+            "description": "This is yet another sample task description.",
+            "due_date": "2026-03-10",
+            "priority": "Low",
+            "notes": [
+                "Note 1 for Task 3",
+                "Note 2 for Task 3"
+            ],
+            "completed": false
+            }
+        ]
+    }
+  ]
+
+}
