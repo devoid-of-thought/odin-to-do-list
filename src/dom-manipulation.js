@@ -10,7 +10,7 @@ import {
   createProjectJsonFromForm,
   validateprojectForm,
 } from "./dom-helper-functions.js";
-import { id } from "date-fns/locale";
+import { populateSidebar } from "./sidebar.js";
 
 export {
   newProjectButtonClickHandler,
@@ -36,6 +36,7 @@ function newProjectButtonClickHandler() {
         document.getElementById("project-form-due-time").value,
         document.getElementById("project-form-priority").value,
       );
+      populateSidebar();
       saveProjectJsonDataToStorage(json);
       const modal = document.querySelector("dialog");
       modal.close();
@@ -128,9 +129,9 @@ const addTaskButton = document.createElement("button");
     createModal(
       "New Task",
       "This is where the form to create a new task will go.",
+        "new-task",
     );
   });
-
 
   const detailsButton = document.createElement("button");
   detailsButton.textContent = "Details";
@@ -139,6 +140,7 @@ const addTaskButton = document.createElement("button");
     createModal(
       "Edit Task Group",
       "This is where the form to edit the task group will go.",
+      "edit-task-group",
     );
   });
 

@@ -6,17 +6,7 @@ export {
     initializeSidebar
 };
 
-function sortSidebarProjectsByPriority(projects) {
-    const priorityMap = {
-        High: 1,
-        Medium: 2,
-        Low: 3,
-    };
-    return projects.sort(
-        (a, b) => (priorityMap[a.meta.priority] || 4) - (priorityMap[b.meta.priority] || 4),
-    );
-}
-function sortByDefault(projects) {
+function sortProjectsByDefault(projects) {
     return projects.sort((a, b) => a.meta.title.localeCompare(b.meta.title));
 }
 function populateSidebar() {
@@ -24,13 +14,15 @@ function populateSidebar() {
     const projectList = document.querySelector("#sidebar-project-list");
 
     const projects = readProjectsJsonDataFromStorage();
-
+    if (!projects) {
+        return;
+    }
     if (sort === "priority") {
-        sortSidebarProjectsByPriority(projects);
+        sortProjectsByPriority(projects);
     } else if (sort === "Due-date") {
         sortProjectsByDueDate(projects);
     } else if (sort === "default") {
-        sortByDefault(projects);
+        sortProjectsByDefault(projects);
     }
     projectList.innerHTML = "";
     projects.forEach(project => {

@@ -1,5 +1,3 @@
-import { add, format } from "date-fns";
-
 
 export
     {
@@ -31,6 +29,9 @@ function readProjectJsonDataFromStorage(title) {
     return null;
   }
   const localStorageData = projectKeys.map((key) => {
+    if (!key.startsWith("todo_")) {
+      return null;
+    }
     const jsonData = localStorage.getItem(key);
     return JSON.parse(jsonData);
   });
@@ -39,7 +40,7 @@ function readProjectJsonDataFromStorage(title) {
 }
 
 function saveProjectJsonDataToStorage(jsonData) {
-  localStorage.setItem(jsonData.meta.title, JSON.stringify(jsonData));
+  localStorage.setItem("todo_" + jsonData.meta.title, JSON.stringify(jsonData));
 }
 function cleanStorage() {
   localStorage.clear();
@@ -146,14 +147,14 @@ function createModal(headerText, headerContent, type) {
     case "new-project":
       modalBody.appendChild(newProjectCase());
       break;
-    case "edit-project":
-      // Create form elements for editing project
+    case "task-group-details":
+      modalBody.appendChild(taskGroupDetailsCase());
       break;
     case "new-task-group":
       modalBody.appendChild(newTaskGroupCase());
       break;
-    case "edit-task-group":
-      // Create form elements for editing task group
+    case "edit-task-group": 
+    modalBody.appendChild(editTaskGroupCase());
       break;
     default:
       modalBody.innerHTML = "<p>Form content goes here.</p>";
@@ -169,6 +170,21 @@ function createModal(headerText, headerContent, type) {
     modal.close();
     modal.remove();
   });
+}
+function taskGroupDetailsCase() {
+  const container = document.createElement("div");
+  container.innerHTML = `
+    <p>Task group details will go here.</p>
+  `;
+  return container;
+}
+
+function editTaskGroupCase() {
+  const container = document.createElement("div");
+  container.innerHTML = `
+    <p>Edit task group form will go here.</p>
+  `;
+  return container;
 }
 function newProjectCase(){
     const form = document.createElement("form");
