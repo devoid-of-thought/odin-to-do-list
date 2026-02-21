@@ -190,7 +190,7 @@ function newTaskCase() {
 
       <div id="task-notes-header">
             <label for="task-notes">Notes:</label>
-      <button id="add-notes-btn" class="edit-group-btn">Add Notes</button>
+      <button type="button" id="add-notes-btn" class="edit-group-btn">Add Notes</button>
       </div>
       <div id="task-notes-container"></div>
 
@@ -210,7 +210,6 @@ function newTaskCase() {
 function editTaskGroupCase() {
   const container = document.createElement("div");
   container.innerHTML = `
-    <p>Edit task group form will go here.</p>
   `;
   return container;
 }

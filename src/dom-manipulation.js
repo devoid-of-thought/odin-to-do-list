@@ -131,7 +131,7 @@ function newTaskButtonClickHandler(group) {
           description: taskDescription,
           due_date: taskDueDate,
           due_time: taskDueTime,
-          notes: [taskNotes],
+          notes: taskNotes,
           priority: taskPriority,
           completed: false,
         };
@@ -154,12 +154,99 @@ function newTaskButtonClickHandler(group) {
   
   return addTaskButton;
 }
-function detailsButtonClickHandler() {
+function detailsButtonClickHandler(group) {
   const detailsButton = document.createElement("button");
   detailsButton.textContent = "Details";
   detailsButton.classList.add("edit-group-btn");
+
+  
   detailsButton.addEventListener("click", () => {
     createModal("Edit Task Group", "Edit the task group.", "edit-task-group");
+    const modal = document.querySelector("dialog");
+    const modalBody = modal.querySelector(".modal-body");
+    for (const task of group.tasks) {
+      const taskElement = document.createElement("div");
+      taskElement.classList.add("task-details-container");
+
+      const taskElementHeader = document.createElement("h3");
+      taskElementHeader.textContent = task.name;
+      taskElement.appendChild(taskElementHeader);
+
+      const taskMetaContainer = document.createElement("div");
+      taskMetaContainer.classList.add("task-meta-container");
+
+      const taskDescriptionContainer = document.createElement("div");
+      taskDescriptionContainer.classList.add("task-description-container");
+      const taskDescriptionHeader = document.createElement("h4");
+      taskDescriptionHeader.textContent = "Description:";
+      taskDescriptionContainer.appendChild(taskDescriptionHeader);
+
+      const taskDescriptionContent = document.createElement("p");
+      taskDescriptionContent.textContent = task.description || "No description provided.";
+      taskDescriptionContainer.appendChild(taskDescriptionContent);
+      taskMetaContainer.appendChild(taskDescriptionContainer);
+
+      const taskDueDateContainer = document.createElement("div");
+      taskDueDateContainer.classList.add("task-due-date-container");
+      const taskDueDateHeader = document.createElement("h4");
+      taskDueDateHeader.textContent = "Due Date:";
+      taskDueDateContainer.appendChild(taskDueDateHeader);
+
+      const taskDueDateContent = document.createElement("p");
+      taskDueDateContent.textContent = `${format(new Date(task.due_date), "d MMMM, yyyy")} at ${task.due_time}`;
+      taskDueDateContainer.appendChild(taskDueDateContent);
+      taskMetaContainer.appendChild(taskDueDateContainer);
+
+
+      const taskPriorityContainer = document.createElement("div");
+      taskPriorityContainer.classList.add("task-priority-container");
+      const taskPriorityHeader = document.createElement("h4");
+      taskPriorityHeader.textContent = "Priority:";
+      taskPriorityContainer.appendChild(taskPriorityHeader);
+
+      const taskPriorityContent = document.createElement("p");
+      taskPriorityContent.textContent = task.priority;
+      taskPriorityContainer.appendChild(taskPriorityContent);
+      taskMetaContainer.appendChild(taskPriorityContainer);
+
+      taskElement.appendChild(taskMetaContainer);
+
+      const taskNotesAndEditContainer = document.createElement("div");
+      taskNotesAndEditContainer.classList.add("task-notes-and-edit-container");
+
+      const taskNotesContainer = document.createElement("div");
+      taskNotesContainer.classList.add("task-notes-container");
+
+      if (task.notes && task.notes.length > 0) {
+        
+        const notesHeader = document.createElement("h4");
+        notesHeader.textContent = "Notes:";
+        taskNotesContainer.appendChild(notesHeader);
+
+        const notesList = document.createElement("ul");
+        for (const note of task.notes) {
+          const noteItem = document.createElement("li");
+          noteItem.textContent = note;
+          notesList.appendChild(noteItem);
+        }
+        taskNotesContainer.appendChild(notesList);
+      }
+      const editTaskButton = document.createElement("button");
+      editTaskButton.textContent = "Edit Task";
+      editTaskButton.classList.add("edit-task-btn");
+      editTaskButton.addEventListener("click", () => {
+        modal.close();
+        modal.remove();
+        createModal("Edit Task", "Edit the task details.", "edit-task");
+      });
+
+      taskNotesAndEditContainer.appendChild(taskNotesContainer);
+      taskNotesAndEditContainer.appendChild(editTaskButton);
+      
+
+      taskElement.appendChild(taskNotesAndEditContainer);
+      modalBody.appendChild(taskElement);
+    }
   });
   return detailsButton;
 }
@@ -203,7 +290,7 @@ function createTaskGroupElement(group) {
   groupTitle.textContent = group.name;
 
   const addTaskButton = newTaskButtonClickHandler(group);
-  const detailsButton = detailsButtonClickHandler();
+  const detailsButton = detailsButtonClickHandler(group);
   groupTaskHeader.appendChild(groupTitle);
   groupTaskHeader.appendChild(addTaskButton);
   groupTaskHeader.appendChild(detailsButton);
