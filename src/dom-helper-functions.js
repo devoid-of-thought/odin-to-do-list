@@ -205,7 +205,7 @@ function editTaskCase() {
       <label for="edit-task-due-date">Due Date:</label>
       <input type="date" id="edit-task-due-date" name="edit-task-due-date" value=${new Date().toISOString().split("T")[0]} required>
       <label for="edit-task-due-time">Due Time:</label>
-      <input type="text" id="edit-task-due-time" name="edit-task-due-time" required>
+      <input type="text" id="edit-task-due-time" name="edit-task-due-time"  required>
 
       <div id="edit-task-notes-header">
             <label for="edit-task-notes">Notes:</label>
@@ -241,7 +241,7 @@ function newTaskCase() {
       <label for="task-due-date">Due Date:</label>
       <input type="date" id="task-due-date" name="task-due-date" value=${new Date().toISOString().split("T")[0]} required>
       <label for="task-due-time">Due Time:</label>
-      <input type="text" id="task-due-time" name="task-due-time" required>
+      <input type="text" id="task-due-time" name="task-due-time" placeholder="HH:MM" required>
 
       <div id="task-notes-header">
             <label for="task-notes">Notes:</label>
