@@ -1,6 +1,7 @@
 import { add, format } from "date-fns";
 import {
   readProjectsJsonDataFromStorage,
+  readProjectJsonDataFromStorage,
   saveProjectJsonDataToStorage,
   extractProjectFromJson,
   extractTaskGroupsFromJson,
@@ -9,10 +10,12 @@ import {
   createProjectJsonFromForm,
   validateprojectForm,
 } from "./dom-helper-functions.js";
+import { id } from "date-fns/locale";
 
 export {
   newProjectButtonClickHandler,
   fromProjectJsonToDom,
+  newTaskGroupButtonClickHandler,
 };
 
 function newProjectButtonClickHandler() {
@@ -37,6 +40,44 @@ function newProjectButtonClickHandler() {
       const modal = document.querySelector("dialog");
       modal.close();
       modal.remove();
+    });
+  });
+}
+function newTaskGroupButtonClickHandler() {
+  const newTaskGroupButton = document.getElementById("new-task-group-btn");
+
+  newTaskGroupButton.addEventListener("click", () => {
+    createModal("New Task Group", "Create a new task group.", "new-task-group");
+    const form = document.querySelector(".modal-body form");
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const taskGroupName = document
+        .getElementById("task-group-name")
+        .value.trim();
+      if (taskGroupName) {
+        console.log(`Creating task group: ${taskGroupName}`);
+        const projectTitleElement = document.getElementById("project-title");
+        const projectJson = readProjectJsonDataFromStorage(
+          projectTitleElement.textContent,
+        );
+        const newTaskGroup = {
+          id: Date.now(),
+          name: taskGroupName,
+          tasks: [],
+        };
+        projectJson.task_groups.push(newTaskGroup);
+        saveProjectJsonDataToStorage(projectJson);
+
+        const modal = document.querySelector("dialog");
+        modal.close();
+        modal.remove();
+
+        const content = document.getElementById("content");
+        content.innerHTML = "";
+        fromProjectJsonToDom(projectJson);
+      } else {
+        alert("Task group name is required.");
+      }
     });
   });
 }
@@ -79,6 +120,18 @@ function createTaskGroupElement(group) {
   const groupTitle = document.createElement("h3");
   groupTitle.textContent = group.name;
 
+
+const addTaskButton = document.createElement("button");
+  addTaskButton.textContent = "Add Task";
+  addTaskButton.classList.add("edit-group-btn");
+  addTaskButton.addEventListener("click", () => {
+    createModal(
+      "New Task",
+      "This is where the form to create a new task will go.",
+    );
+  });
+
+
   const detailsButton = document.createElement("button");
   detailsButton.textContent = "Details";
   detailsButton.classList.add("edit-group-btn");
@@ -89,7 +142,9 @@ function createTaskGroupElement(group) {
     );
   });
 
+
   groupTaskHeader.appendChild(groupTitle);
+    groupTaskHeader.appendChild(addTaskButton);
   groupTaskHeader.appendChild(detailsButton);
   groupContainer.appendChild(groupTaskHeader);
   const groupInfo = document.createElement("p");
@@ -128,7 +183,11 @@ function createTaskGroupElement(group) {
     taskElement.appendChild(taskDueDate);
     taksList.appendChild(taskElement);
   }
+
+
+  
   groupContainer.appendChild(taksList);
+
   return groupContainer;
 }
 
@@ -138,7 +197,7 @@ function fromProjectJsonToDom(jsonData) {
   const projectContainer = document.createElement("div");
   projectContainer.id = "project-container";
 
-  const { projectTitle, projectDescription, projectDueDate, projectDueTime} =
+  const { projectTitle, projectDescription, projectDueDate, projectDueTime } =
     extractProjectFromJson(jsonData);
 
   const projectHeader = createProjectHeaderElement(
@@ -157,16 +216,4 @@ function fromProjectJsonToDom(jsonData) {
     projectContainer.appendChild(groupContainer);
   });
   content.appendChild(projectContainer);
-}
-
-
-function newTaskGroupButtonClickHandler() {
-  const newTaskGroupButton = document.getElementById("new-task-group-btn");
-  
-  newTaskGroupButton.addEventListener("click", () => {
-    createModal(
-      "New Task Group",
-      "This is where the form to create a new task group will go.",
-    );
-  });
 }

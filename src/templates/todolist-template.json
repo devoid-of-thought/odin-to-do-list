@@ -8,6 +8,7 @@
   },
   "task_groups": [
     {
+      "id": 1,
       "name": "Group 1",
       "tasks": [
         {
@@ -36,6 +37,7 @@
       ]
     },
     {
+        "id": 2,
         "name": "Group 2",
         "tasks": [
             {

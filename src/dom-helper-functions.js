@@ -4,6 +4,7 @@ import { add, format } from "date-fns";
 export
     {
         readProjectsJsonDataFromStorage,
+        readProjectJsonDataFromStorage,
         saveProjectJsonDataToStorage,
         cleanStorage,
         extractProjectFromJson,
@@ -23,6 +24,18 @@ function readProjectsJsonDataFromStorage() {
     return JSON.parse(jsonData);
   });
   return localStorageData;
+}
+function readProjectJsonDataFromStorage(title) {
+  const projectKeys = Object.keys(localStorage);
+  if (projectKeys.length === 0) {
+    return null;
+  }
+  const localStorageData = projectKeys.map((key) => {
+    const jsonData = localStorage.getItem(key);
+    return JSON.parse(jsonData);
+  });
+
+  return localStorageData.find((data) => data.meta.title === title) || null;
 }
 
 function saveProjectJsonDataToStorage(jsonData) {
@@ -131,7 +144,34 @@ function createModal(headerText, headerContent, type) {
 
   switch (type) {
     case "new-project":
-      const form = document.createElement("form");
+      modalBody.appendChild(newProjectCase());
+      break;
+    case "edit-project":
+      // Create form elements for editing project
+      break;
+    case "new-task-group":
+      modalBody.appendChild(newTaskGroupCase());
+      break;
+    case "edit-task-group":
+      // Create form elements for editing task group
+      break;
+    default:
+      modalBody.innerHTML = "<p>Form content goes here.</p>";
+  }
+  modal.appendChild(modalBody);
+  document.body.appendChild(modal);
+  modal.showModal();
+  if (type === "new-project") {
+    addTimePickerToModal();
+  }
+  const closeButton = modal.querySelector("#close-modal");
+  closeButton.addEventListener("click", () => {
+    modal.close();
+    modal.remove();
+  });
+}
+function newProjectCase(){
+    const form = document.createElement("form");
       form.innerHTML = `
             <label for="project-title">Project Title:</label>
             <input type="text" id="project-form-title" name="project-title" required>
@@ -153,33 +193,18 @@ function createModal(headerText, headerContent, type) {
 
             <button type="submit">Create Project</button>
           `;
-      modalBody.appendChild(form);
-      break;
-    case "edit-project":
-      // Create form elements for editing project
-      break;
-    case "new-task-group":
-      // Create form elements for new task group
-      break;
-    case "edit-task-group":
-      // Create form elements for editing task group
-      break;
-    default:
-      modalBody.innerHTML = "<p>Form content goes here.</p>";
-  }
-  modal.appendChild(modalBody);
-  document.body.appendChild(modal);
-  modal.showModal();
-  if (type === "new-project") {
-    addTimePickerToModal();
-  }
-  const closeButton = modal.querySelector("#close-modal");
-  closeButton.addEventListener("click", () => {
-    modal.close();
-    modal.remove();
-  });
+    return form;
 }
 
+function newTaskGroupCase(){
+    const form = document.createElement("form");
+    form.id = "task-group-form";
+    form.innerHTML = `
+      <label for="task-group-name">Task Group Name:</label>
+      <input type="text" id="task-group-name" name="task-group-name" required>
+      <button type="submit">Create Task Group</button>
+    `;
+    return form;}
 function createProjectJsonFromForm(
   title,
   description,
