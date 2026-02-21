@@ -182,7 +182,7 @@ function createModal(headerText, headerContent, type) {
   modal.appendChild(modalBody);
   document.body.appendChild(modal);
   modal.showModal();
-  if (type === "new-project" || type === "new-task") {
+  if (type === "new-project" || type === "new-task" || type === "edit-task") {
     addTimePickerToModal(type);
   }
   const closeButton = modal.querySelector("#close-modal");
@@ -203,7 +203,7 @@ function editTaskCase() {
       <textarea id="edit-task-description" name="edit-task-description"></textarea>
       
       <label for="edit-task-due-date">Due Date:</label>
-      <input type="date" id="edit-task-due-date" name="edit-task-due-date" value=${new Date().toISOString().split("T")[0]} required>
+      <input type="date" id="edit-task-due-date" name="edit-task-due-date" value=${new Date().toISOString().split('T')[0]} required>
       <label for="edit-task-due-time">Due Time:</label>
       <input type="text" id="edit-task-due-time" name="edit-task-due-time"  required>
 
@@ -239,7 +239,7 @@ function newTaskCase() {
       <textarea id="task-description" name="task-description"></textarea>
       
       <label for="task-due-date">Due Date:</label>
-      <input type="date" id="task-due-date" name="task-due-date" value=${new Date().toISOString().split("T")[0]} required>
+      <input type="date" id="task-due-date" name="task-due-date" value=${new Date().toISOString().split('T')[0]} required>
       <label for="task-due-time">Due Time:</label>
       <input type="text" id="task-due-time" name="task-due-time" placeholder="HH:MM" required>
 
@@ -278,9 +278,9 @@ function newProjectCase(){
             <textarea id="project-form-description" name="project-description" required></textarea>
             
             <label for="project-due-date">Due Date:</label>
-            <input type="date" id="project-form-due-date" name="project-due-date" value=${new Date().toISOString().split("T")[0]} required>
+            <input type="date" id="project-form-due-date" name="project-due-date" value=${new Date().toISOString().split('T')[0]} required>
             <label for="project-due-time">Due Time:</label>
-            <input type="text" id="project-form-due-time" name="project-due-time" required>
+            <input type="text" id="project-form-due-time" name="project-due-time" placeholder="HH:MM" required>
 
             <label for="project-priority">Priority:</label>
             <select id="project-form-priority" name="project-priority">
