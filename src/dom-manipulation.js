@@ -138,13 +138,14 @@ function fromProjectJsonToDom(jsonData) {
   const projectContainer = document.createElement("div");
   projectContainer.id = "project-container";
 
-  const { projectTitle, projectDescription, projectDueDate, projectPriority } =
+  const { projectTitle, projectDescription, projectDueDate, projectDueTime} =
     extractProjectFromJson(jsonData);
 
   const projectHeader = createProjectHeaderElement(
     projectTitle,
     projectDescription,
     projectDueDate,
+    projectDueTime,
   );
 
   projectContainer.appendChild(projectHeader);

@@ -1,6 +1,7 @@
 // Add your JavaScript code here
 import "./styles.css";
-import projectData from "./todolist-template.json" assert { type: "json" };
+import projectData from "./templates/todolist-template.json" assert { type: "json" };
+import anotherProjectData from "./templates/another-template.json" assert { type: "json" };
 
 import { format } from "date-fns";
 import { newProjectButtonClickHandler,fromProjectJsonToDom } from "./dom-manipulation.js";
@@ -11,5 +12,6 @@ const content = document.getElementById("content");
 
 fromProjectJsonToDom(projectData);
 saveProjectJsonDataToStorage(projectData);
+saveProjectJsonDataToStorage(anotherProjectData);
 populateSidebar();
 newProjectButtonClickHandler();

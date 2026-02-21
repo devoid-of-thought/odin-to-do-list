@@ -1,0 +1,142 @@
+{
+  "meta": {
+    "title": "Generic Project Template",
+    "description": "A standard template with four distinct phases for organizing a project.",
+    "due_date": "2026-12-31",
+    "due_time": "17:00",
+    "priority": "Medium"
+  },
+  "task_groups": [
+    {
+      "name": "Phase 1: Initiation",
+      "tasks": [
+        {
+          "id": 1,
+          "name": "Task 1.1",
+          "description": "First task in the initiation phase.",
+          "due_date": "2026-05-01",
+          "due_time": "09:00",
+          "priority": "High",
+          "notes": [
+            "Initial note"
+          ],
+          "completed": false
+        },
+        {
+          "id": 2,
+          "name": "Task 1.2",
+          "description": "Second task in the initiation phase.",
+          "due_date": "2026-05-05",
+          "due_time": "11:00",
+          "priority": "Medium",
+          "notes": [],
+          "completed": false
+        }
+      ]
+    },
+    {
+      "name": "Phase 2: Planning",
+      "tasks": [
+        {
+          "id": 3,
+          "name": "Task 2.1",
+          "description": "First task in the planning phase.",
+          "due_date": "2026-06-10",
+          "due_time": "10:00",
+          "priority": "Medium",
+          "notes": [],
+          "completed": false
+        },
+        {
+          "id": 4,
+          "name": "Task 2.2",
+          "description": "Second task in the planning phase.",
+          "due_date": "2026-06-15",
+          "due_time": "14:00",
+          "priority": "Low",
+          "notes": [
+            "Planning note 1",
+            "Planning note 2"
+          ],
+          "completed": false
+        },
+        {
+          "id": 5,
+          "name": "Task 2.3",
+          "description": "Third task in the planning phase.",
+          "due_date": "2026-06-20",
+          "due_time": "16:00",
+          "priority": "High",
+          "notes": [],
+          "completed": false
+        }
+      ]
+    },
+    {
+      "name": "Phase 3: Execution",
+      "tasks": [
+        {
+          "id": 6,
+          "name": "Task 3.1",
+          "description": "Sole task in the execution phase.",
+          "due_date": "2026-08-15",
+          "due_time": "12:00",
+          "priority": "High",
+          "notes": [
+            "Execution note"
+          ],
+          "completed": false
+        }
+      ]
+    },
+    {
+      "name": "Phase 4: Closure",
+      "tasks": [
+        {
+          "id": 7,
+          "name": "Task 4.1",
+          "description": "First task in the closure phase.",
+          "due_date": "2026-12-01",
+          "due_time": "09:00",
+          "priority": "Low",
+          "notes": [],
+          "completed": false
+        },
+        {
+          "id": 8,
+          "name": "Task 4.2",
+          "description": "Second task in the closure phase.",
+          "due_date": "2026-12-10",
+          "due_time": "10:30",
+          "priority": "Medium",
+          "notes": [],
+          "completed": false
+        },
+        {
+          "id": 9,
+          "name": "Task 4.3",
+          "description": "Third task in the closure phase.",
+          "due_date": "2026-12-20",
+          "due_time": "13:00",
+          "priority": "High",
+          "notes": [
+            "Final review"
+          ],
+          "completed": false
+        },
+        {
+          "id": 10,
+          "name": "Task 4.4",
+          "description": "Fourth task in the closure phase.",
+          "due_date": "2026-12-31",
+          "due_time": "17:00",
+          "priority": "High",
+          "notes": [
+            "Project handover"
+          ],
+          "completed": false
+        }
+      ]
+    }
+  ]
+}
