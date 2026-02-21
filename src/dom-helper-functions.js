@@ -77,9 +77,9 @@ function sortTaskGroupByPriority(taskGroup) {
   );
 }
 
-function addTimePickerToModal() {
-  const timeInput = document.getElementById("project-form-due-time");
-
+function addTimePickerToModal(type) {
+  let timeInput = document.getElementById(`${type === "new-project" ? "project-form-due-time" : "task-due-time"}`);
+  
   timeInput.addEventListener("click", () => {
     if (document.getElementById("time-picker-modal")) {
       return;
@@ -149,8 +149,8 @@ function createModal(headerText, headerContent, type) {
     case "new-project":
       modalBody.appendChild(newProjectCase());
       break;
-    case "task-group-details":
-      modalBody.appendChild(taskGroupDetailsCase());
+    case "new-task":
+      modalBody.appendChild(newTaskCase());
       break;
     case "new-task-group":
       modalBody.appendChild(newTaskGroupCase());
@@ -164,8 +164,8 @@ function createModal(headerText, headerContent, type) {
   modal.appendChild(modalBody);
   document.body.appendChild(modal);
   modal.showModal();
-  if (type === "new-project") {
-    addTimePickerToModal();
+  if (type === "new-project" || type === "new-task") {
+    addTimePickerToModal(type);
   }
   const closeButton = modal.querySelector("#close-modal");
   closeButton.addEventListener("click", () => {
@@ -173,10 +173,36 @@ function createModal(headerText, headerContent, type) {
     modal.remove();
   });
 }
-function taskGroupDetailsCase() {
+function newTaskCase() {
   const container = document.createElement("div");
   container.innerHTML = `
-    <p>Task group details will go here.</p>
+    <form id="task-form">
+      <label for="task-title">Task Title:</label>
+      <input type="text" id="task-title" name="task-title" required>
+      
+      <label for="task-description">Task Notes:</label>
+      <textarea id="task-description" name="task-description"></textarea>
+      
+      <label for="task-due-date">Due Date:</label>
+      <input type="date" id="task-due-date" name="task-due-date" value=${new Date().toISOString().split("T")[0]} required>
+      <label for="task-due-time">Due Time:</label>
+      <input type="text" id="task-due-time" name="task-due-time" required>
+
+      <div id="task-notes-header">
+            <label for="task-notes">Notes:</label>
+      <button id="add-notes-btn" class="edit-group-btn">Add Notes</button>
+      </div>
+      <div id="task-notes-container"></div>
+
+      <label for="task-priority">Priority:</label>
+      <select id="task-priority" name="task-priority">
+        <option value="High">High</option>
+        <option value="Medium" selected>Medium</option>
+        <option value="Low">Low</option>
+      </select>
+
+      <button type="submit">Create Task</button>
+    </form>
   `;
   return container;
 }

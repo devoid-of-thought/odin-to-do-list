@@ -478,3 +478,13 @@ dialog #task-group-form input {
   color: var(--primary-color);
   width: 100%;
 }
+#task-notes-header{
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+#task-notes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

@@ -85,6 +85,85 @@ function newTaskGroupButtonClickHandler() {
   });
 }
 
+function newTaskButtonClickHandler(group) {
+  const addTaskButton = document.createElement("button");
+  addTaskButton.textContent = "Add Task";
+  addTaskButton.classList.add("edit-group-btn");
+
+  addTaskButton.addEventListener("click", () => {
+    createModal("New Task", "Create a new task.", "new-task");
+    
+    const form = document.querySelector(".modal-body form");
+        const addNotesButton = document.getElementById("add-notes-btn");
+        addNotesButton.addEventListener("click", () => {
+        const notesContainer = document.getElementById("task-notes-container");
+        const noteInput = document.createElement("input");
+        noteInput.type = "text";
+        noteInput.placeholder = "Enter a note";
+        noteInput.id = `task-note-${Date.now()}`;
+        notesContainer.appendChild(noteInput);
+      });
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const taskTitle = document.getElementById("task-title").value.trim();
+      const taskDescription = document.getElementById("task-description").value.trim();
+      const taskDueDate = document.getElementById("task-due-date").value;
+      const taskDueTime = document.getElementById("task-due-time").value;
+      const taskPriority = document.getElementById("task-priority").value;
+
+
+
+      if (!taskTitle || !taskDueDate || !taskDueTime) {
+        alert("Task title, due date, and due time are required.");
+        return; 
+      }
+
+      const projectTitleElement = document.getElementById("project-title");
+      const projectJson = readProjectJsonDataFromStorage(projectTitleElement.textContent);
+      
+      const taskGroup = projectJson.task_groups.find((g) => g.id === group.id);
+      const taskNotes = Array.from(document.querySelectorAll("#task-notes-container input")).map(input => input.value.trim()).filter(note => note !== "");
+      if (taskGroup) {
+        const newTask = {
+          id: Date.now(),
+          name: taskTitle,
+          description: taskDescription,
+          due_date: taskDueDate,
+          due_time: taskDueTime,
+          notes: [taskNotes],
+          priority: taskPriority,
+          completed: false,
+        };
+        
+        taskGroup.tasks.push(newTask);
+        saveProjectJsonDataToStorage(projectJson);
+
+        const modal = document.querySelector("dialog");
+        modal.close();
+        modal.remove();
+
+        const content = document.getElementById("content");
+        content.innerHTML = "";
+        fromProjectJsonToDom(projectJson);
+      } else {
+        alert("Task group not found.");
+      }
+    });
+  });
+  
+  return addTaskButton;
+}
+function detailsButtonClickHandler() {
+  const detailsButton = document.createElement("button");
+  detailsButton.textContent = "Details";
+  detailsButton.classList.add("edit-group-btn");
+  detailsButton.addEventListener("click", () => {
+    createModal("Edit Task Group", "Edit the task group.", "edit-task-group");
+  });
+  return detailsButton;
+}
+
 function createProjectHeaderElement(
   projectTitle,
   projectDescription,
@@ -123,32 +202,10 @@ function createTaskGroupElement(group) {
   const groupTitle = document.createElement("h3");
   groupTitle.textContent = group.name;
 
-
-const addTaskButton = document.createElement("button");
-  addTaskButton.textContent = "Add Task";
-  addTaskButton.classList.add("edit-group-btn");
-  addTaskButton.addEventListener("click", () => {
-    createModal(
-      "New Task",
-      "This is where the form to create a new task will go.",
-        "new-task",
-    );
-  });
-
-  const detailsButton = document.createElement("button");
-  detailsButton.textContent = "Details";
-  detailsButton.classList.add("edit-group-btn");
-  detailsButton.addEventListener("click", () => {
-    createModal(
-      "Edit Task Group",
-      "This is where the form to edit the task group will go.",
-      "edit-task-group",
-    );
-  });
-
-
+  const addTaskButton = newTaskButtonClickHandler(group);
+  const detailsButton = detailsButtonClickHandler();
   groupTaskHeader.appendChild(groupTitle);
-    groupTaskHeader.appendChild(addTaskButton);
+  groupTaskHeader.appendChild(addTaskButton);
   groupTaskHeader.appendChild(detailsButton);
   groupContainer.appendChild(groupTaskHeader);
   const groupInfo = document.createElement("p");
@@ -188,8 +245,6 @@ const addTaskButton = document.createElement("button");
     taksList.appendChild(taskElement);
   }
 
-
-  
   groupContainer.appendChild(taksList);
 
   return groupContainer;
