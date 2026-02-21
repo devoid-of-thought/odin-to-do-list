@@ -3,6 +3,7 @@
     "title": "To-Do List Template",
     "description": "A template for a to-do list application.",
     "due_date": "2026-03-01",
+    "due_time": "12:00",
     "priority": "High"
   },
   "task_groups": [
@@ -14,7 +15,8 @@
           "name": "Task 1",
           "description": "This is a sample task description.",
           "due_date": "2026-03-01",
-          "priority": "High",
+          "due_time": "14:00",
+          "priority": "Low",
           "notes": [
             "Note 1 for Task 1"
           ],
@@ -25,6 +27,7 @@
           "name": "Task 2",
           "description": "This is another sample task description.",
           "due_date": "2026-03-05",
+          "due_time": "16:00",
           "priority": "Medium",
           "notes": [
           ],
@@ -41,6 +44,7 @@
             "description": "This is yet another sample task description.",
             "due_date": "2026-03-10",
             "priority": "Low",
+            "due_time": "10:11",
             "notes": [
                 "Note 1 for Task 3",
                 "Note 2 for Task 3"

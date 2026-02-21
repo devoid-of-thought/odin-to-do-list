@@ -171,7 +171,7 @@ button:hover {
 
 #project-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   grid-template-rows: auto 1fr;
   gap: 1rem;
   background-color: var(--close-background-color);
@@ -203,12 +203,7 @@ button:hover {
   grid-row: 1 / 2;
   justify-self: end;
 }
-#tasks-container{
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
-}
+
 .task-group {
   background-color: var(--far-background-color);
   padding: 1rem;
@@ -229,17 +224,20 @@ button:hover {
   list-style: none;
   padding: 0.5rem;
   margin-left: 0.5rem;
+  width: 100%;
 }
 .task-group ul li {
-  margin-bottom: 0.5rem;
+  margin: 0 1rem 1rem 0;
   gap: 1rem;
+  width: 100%;
   display: flex;
+  justify-content: space-between;
 }
-.task-group ul li a {
-  cursor: pointer;
-  font-size: 1rem;
-  text-decoration: none;
-} 
+.task-group ul li p.task-due-date {
+  font-weight: bold;
+  align-self: flex-end;
+  justify-self: flex-end;
+}
 .custom-checkbox {
   display: flex;
   align-items: center;
@@ -345,4 +343,99 @@ button.edit-group-btn {
 }
 .note-task:focus-within label {
   color: var(--secondary-color);
+}
+
+dialog {
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background-color: var(--close-background-color);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  width: 60vw;
+  height: 80vh;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+dialog .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+dialog .modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+dialog .modal-body form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+dialog .modal-body form label {
+  font-size: 2rem;
+  font-weight: bold;
+}
+dialog .modal-body form input,
+dialog .modal-body form textarea,
+dialog .modal-body form select {
+  padding: 0.5rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 0.5rem;
+  background-color: transparent;
+  outline: none;
+  color: var(--primary-color);
+  width: 100%;
+}
+
+.group-info {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  font-weight: bold;
+}
+#time-picker-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+    width: 50%;
+  height: 30%;
+}
+#time-picker-modal .time-picker-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+#time-picker-modal .time-picker-container label {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+#time-picker-modal .time-picker-container input {
+  padding: 0.5rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 0.5rem;
+  background-color: transparent;
+  outline: none;
+  color: var(--primary-color);
+  width:max-content;
+}
+#time-picker-modal .time-picker-container .time-picker-inputs {
+  display: flex;
+gap: 2rem;
+}
+.save-time-btn {
+  background-color: var(--secondary-color);
+  color: var(--close-background-color);
+  padding: 0.5rem 1.2rem;
+  height: auto;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  width:100%;
 }
