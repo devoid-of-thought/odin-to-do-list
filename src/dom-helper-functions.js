@@ -18,9 +18,12 @@ function readProjectsJsonDataFromStorage() {
     return null;
   }
   const localStorageData = projectKeys.map((key) => {
+    if (!key.startsWith("todo_")) {
+      return null;
+    }
     const jsonData = localStorage.getItem(key);
     return JSON.parse(jsonData);
-  });
+  }).filter((data) => data !== null);
   return localStorageData;
 }
 function readProjectJsonDataFromStorage(title) {
@@ -28,15 +31,14 @@ function readProjectJsonDataFromStorage(title) {
   if (projectKeys.length === 0) {
     return null;
   }
-  const localStorageData = projectKeys.map((key) => {
+  const foundProject = projectKeys.map((key) => {
     if (!key.startsWith("todo_")) {
       return null;
     }
     const jsonData = localStorage.getItem(key);
     return JSON.parse(jsonData);
-  });
-
-  return localStorageData.find((data) => data.meta.title === title) || null;
+  }).filter((data) => data !== null).find((data) => data.meta.title === title);
+  return foundProject || null;
 }
 
 function saveProjectJsonDataToStorage(jsonData) {

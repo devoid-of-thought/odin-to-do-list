@@ -36,8 +36,10 @@ function newProjectButtonClickHandler() {
         document.getElementById("project-form-due-time").value,
         document.getElementById("project-form-priority").value,
       );
-      populateSidebar();
       saveProjectJsonDataToStorage(json);
+
+      populateSidebar();
+
       const modal = document.querySelector("dialog");
       modal.close();
       modal.remove();
