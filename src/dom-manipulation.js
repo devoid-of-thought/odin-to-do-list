@@ -158,3 +158,15 @@ function fromProjectJsonToDom(jsonData) {
   });
   content.appendChild(projectContainer);
 }
+
+
+function newTaskGroupButtonClickHandler() {
+  const newTaskGroupButton = document.getElementById("new-task-group-btn");
+  
+  newTaskGroupButton.addEventListener("click", () => {
+    createModal(
+      "New Task Group",
+      "This is where the form to create a new task group will go.",
+    );
+  });
+}

@@ -18,7 +18,14 @@
   <body>
     <div class="sidebar sidebar-open">
       <h1>To Do List</h1>
-      <p>Project List:</p>
+      <div id="project-list-header">
+          <p>Project List:</p>
+          <select name="sort-projects-sidebar" id="sidebar-project-select">
+              <option value="default">Default</option>
+              <option value="due-date">Due Date</option>
+              <option value="priority">Priority</option>
+          </select>
+      </div>
       <ul id="sidebar-project-list">
       </ul>
     </div>

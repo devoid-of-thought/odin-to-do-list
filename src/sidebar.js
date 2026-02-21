@@ -2,7 +2,8 @@ import {readProjectsJsonDataFromStorage} from "./dom-helper-functions.js";
 import {fromProjectJsonToDom} from "./dom-manipulation.js";
 
 export {
-    populateSidebar
+    populateSidebar,
+    initializeSidebar
 };
 
 function sortSidebarProjectsByPriority(projects) {
@@ -15,12 +16,22 @@ function sortSidebarProjectsByPriority(projects) {
         (a, b) => (priorityMap[a.meta.priority] || 4) - (priorityMap[b.meta.priority] || 4),
     );
 }
+function sortByDefault(projects) {
+    return projects.sort((a, b) => a.meta.title.localeCompare(b.meta.title));
+}
 function populateSidebar() {
+    const sort  =  document.getElementById("sidebar-project-select").value;
     const projectList = document.querySelector("#sidebar-project-list");
 
     const projects = readProjectsJsonDataFromStorage();
 
-    sortSidebarProjectsByPriority(projects);
+    if (sort === "priority") {
+        sortSidebarProjectsByPriority(projects);
+    } else if (sort === "Due-date") {
+        sortProjectsByDueDate(projects);
+    } else if (sort === "default") {
+        sortByDefault(projects);
+    }
     projectList.innerHTML = "";
     projects.forEach(project => {
         const projectItem = document.createElement("li");
@@ -39,8 +50,34 @@ function loadProject(project) {
     fromProjectJsonToDom(project);
 }
 
-const menuButton = document.getElementById("menu-button");
+function initializeSidebar() {
+    const menuButton = document.getElementById("menu-button");
 
-menuButton.addEventListener("click", () => {
-  document.body.classList.toggle("sidebar-open");
-});
+    menuButton.addEventListener("click", () => {
+        document.body.classList.toggle("sidebar-open");
+    });
+        const sortSelect = document.getElementById("sidebar-project-select");
+    sortSelect.addEventListener("change", () => {
+        populateSidebar();
+    });
+}
+
+
+function sortProjectsByDueDate(projects) {
+    return projects.sort((a, b) => {
+        const dateA = new Date(a.meta.due_date);
+        const dateB = new Date(b.meta.due_date);
+        return dateA - dateB;
+    });
+}
+
+function sortProjectsByPriority(projects) {
+    const priorityMap = {
+        High: 1,
+        Medium: 2,
+        Low: 3,
+    };
+    return projects.sort(
+        (a, b) => (priorityMap[a.meta.priority] || 4) - (priorityMap[b.meta.priority] || 4),
+    );
+}

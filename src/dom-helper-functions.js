@@ -5,6 +5,7 @@ export
     {
         readProjectsJsonDataFromStorage,
         saveProjectJsonDataToStorage,
+        cleanStorage,
         extractProjectFromJson,
         extractTaskGroupsFromJson,
         sortTaskGroupByPriority,
@@ -27,7 +28,9 @@ function readProjectsJsonDataFromStorage() {
 function saveProjectJsonDataToStorage(jsonData) {
   localStorage.setItem(jsonData.meta.title, JSON.stringify(jsonData));
 }
-
+function cleanStorage() {
+  localStorage.clear();
+}
 function extractProjectFromJson(jsonData) {
   const projectTitle = jsonData.meta.title;
   const projectDescription = jsonData.meta.description;
