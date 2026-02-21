@@ -40,7 +40,9 @@ function newProjectButtonClickHandler() {
       saveProjectJsonDataToStorage(json);
 
       populateSidebar();
-
+      const content = document.getElementById("content");
+      content.innerHTML = "";
+      fromProjectJsonToDom(json);
       const modal = document.querySelector("dialog");
       modal.close();
       modal.remove();
@@ -562,6 +564,15 @@ function createTaskGroupElement(group) {
 
 function fromProjectJsonToDom(jsonData) {
   const content = document.getElementById("content");
+
+if (!jsonData) {
+    content.innerHTML = `
+      <div class="empty-state">
+        <h2>No projects found</h2>
+        <p>Click "New Project" in to create one.</p>
+      </div>`;
+    return;
+  }
 
   const projectContainer = document.createElement("div");
   projectContainer.id = "project-container";
