@@ -154,18 +154,8 @@ function newTaskButtonClickHandler(group) {
   
   return addTaskButton;
 }
-function detailsButtonClickHandler(group) {
-  const detailsButton = document.createElement("button");
-  detailsButton.textContent = "Details";
-  detailsButton.classList.add("edit-group-btn");
 
-  
-  detailsButton.addEventListener("click", () => {
-    createModal("Edit Task Group", "Edit the task group.", "edit-task-group");
-    const modal = document.querySelector("dialog");
-    const modalBody = modal.querySelector(".modal-body");
-    for (const task of group.tasks) {
-      const taskElement = document.createElement("div");
+function createTaskDetailsElement(group,task) {const taskElement = document.createElement("div");
       taskElement.classList.add("task-details-container");
 
       const taskElementHeader = document.createElement("h3");
@@ -234,17 +224,110 @@ function detailsButtonClickHandler(group) {
       const editTaskButton = document.createElement("button");
       editTaskButton.textContent = "Edit Task";
       editTaskButton.classList.add("edit-task-btn");
-      editTaskButton.addEventListener("click", () => {
-        modal.close();
-        modal.remove();
-        createModal("Edit Task", "Edit the task details.", "edit-task");
-      });
+
+      addEditTaskButtonListener(group,editTaskButton, task);
+
 
       taskNotesAndEditContainer.appendChild(taskNotesContainer);
       taskNotesAndEditContainer.appendChild(editTaskButton);
-      
-
       taskElement.appendChild(taskNotesAndEditContainer);
+      return taskElement;
+    }
+
+
+function addEditTaskButtonListener(group,editTaskButton, task) {
+
+        editTaskButton.addEventListener("click", () => {
+        createModal("Edit Task", "Edit the task details.", "edit-task");
+        const form = document.querySelector(".modal-body form");
+        const taskTitleInput = document.getElementById("edit-task-title");
+        const taskDescriptionInput = document.getElementById("edit-task-description");
+        const taskDueDateInput = document.getElementById("edit-task-due-date");
+        const taskDueTimeInput = document.getElementById("edit-task-due-time");
+        const taskPriorityInput = document.getElementById("edit-task-priority");
+        const addNotesButton = document.getElementById("edit-add-notes-btn");
+        const taskNotesContainer = document.getElementById("edit-task-notes-container");
+        
+        taskTitleInput.value = task.name;
+        taskDescriptionInput.value = task.description;
+        taskDueDateInput.value = task.due_date;
+        taskDueTimeInput.value = task.due_time;
+        taskPriorityInput.value = task.priority;
+        if (task.notes && task.notes.length > 0) {
+          for (const note of task.notes) {
+            const noteInput = document.createElement("input");
+            noteInput.type = "text";
+            noteInput.value = note;
+            taskNotesContainer.appendChild(noteInput);
+          }
+        }
+
+        addNotesButton.addEventListener("click", () => {
+          const noteInput = document.createElement("input");
+          noteInput.type = "text";
+          noteInput.placeholder = "Enter a note";
+          noteInput.id = `task-note-${Date.now()}`;
+          taskNotesContainer.appendChild(noteInput);
+      });
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          const updatedTaskTitle = taskTitleInput.value.trim();
+          const updatedTaskDescription = taskDescriptionInput.value.trim();
+          const updatedTaskDueDate = taskDueDateInput.value;
+          const updatedTaskDueTime = taskDueTimeInput.value;
+          const updatedTaskPriority = taskPriorityInput.value;
+          const updatedTaskNotes = Array.from(taskNotesContainer.querySelectorAll("input")).map(input => input.value.trim()).filter(note => note !== "");
+
+          if (!updatedTaskTitle || !updatedTaskDueDate || !updatedTaskDueTime) {
+            alert("Task title, due date, and due time are required.");
+            return; 
+          }
+
+          task.name = updatedTaskTitle;
+          task.description = updatedTaskDescription;
+          task.due_date = updatedTaskDueDate;
+          task.due_time = updatedTaskDueTime;
+          task.priority = updatedTaskPriority;
+          task.notes = updatedTaskNotes;
+
+          const projectTitleElement = document.getElementById("project-title");
+          const projectJson = readProjectJsonDataFromStorage(projectTitleElement.textContent);
+          const taskGroup = projectJson.task_groups.find((g) => g.id === group.id);
+          if (taskGroup) {
+            const taskIndex = taskGroup.tasks.findIndex((t) => t.id === task.id);
+            if (taskIndex !== -1) {
+              taskGroup.tasks[taskIndex] = task;
+              saveProjectJsonDataToStorage(projectJson);
+
+              const content = document.getElementById("content");
+              content.innerHTML = "";
+              fromProjectJsonToDom(projectJson);
+            } else {
+              alert("Task not found in the group.");
+            }
+          } else {
+            alert("Task group not found.");
+          }
+
+          const modal = form.closest("dialog");
+          modal.close();
+          modal.remove();
+        });
+    });
+}
+function detailsButtonClickHandler(group) {
+  const detailsButton = document.createElement("button");
+  detailsButton.textContent = "Details";
+  detailsButton.classList.add("edit-group-btn");
+
+  
+  detailsButton.addEventListener("click", () => {
+    createModal("Edit Task Group", "Edit the task group.", "edit-task-group");
+    const modal = document.querySelector("dialog");
+    const modalBody = modal.querySelector(".modal-body");
+    for (const task of group.tasks) {
+      const taskElement = createTaskDetailsElement(group, task);
       modalBody.appendChild(taskElement);
     }
   });

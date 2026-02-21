@@ -158,6 +158,9 @@ function createModal(headerText, headerContent, type) {
     case "edit-task-group": 
     modalBody.appendChild(editTaskGroupCase());
       break;
+    case "edit-task":
+      modalBody.appendChild(editTaskCase());
+      break;
     default:
       modalBody.innerHTML = "<p>Form content goes here.</p>";
   }
@@ -172,6 +175,39 @@ function createModal(headerText, headerContent, type) {
     modal.close();
     modal.remove();
   });
+}
+
+function editTaskCase() {
+  const container = document.createElement("div");
+  container.innerHTML = `
+    <form id="edit-task-form">
+      <label for="edit-task-title">Task Title:</label>
+      <input type="text" id="edit-task-title" name="edit-task-title" required>
+      
+      <label for="edit-task-description">Task Notes:</label>
+      <textarea id="edit-task-description" name="edit-task-description"></textarea>
+      
+      <label for="edit-task-due-date">Due Date:</label>
+      <input type="date" id="edit-task-due-date" name="edit-task-due-date" value=${new Date().toISOString().split("T")[0]} required>
+      <label for="edit-task-due-time">Due Time:</label>
+      <input type="text" id="edit-task-due-time" name="edit-task-due-time" required>
+
+      <div id="edit-task-notes-header">
+            <label for="edit-task-notes">Notes:</label>
+      <button type="button" id="edit-add-notes-btn" class="edit-group-btn">Add Notes</button>
+      </div>
+      <div id="edit-task-notes-container"></div>  
+      <label for="edit-task-priority">Priority:</label>
+      <select id="edit-task-priority" name="edit-task-priority">
+        <option value="High">High</option>
+        <option value="Medium" selected>Medium</option>
+        <option value="Low">Low</option>
+      </select>
+
+      <button type="submit">Save Changes</button>
+    </form>
+  `;
+  return container;
 }
 function newTaskCase() {
   const container = document.createElement("div");
