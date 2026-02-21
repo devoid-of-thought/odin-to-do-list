@@ -2,6 +2,7 @@
 export
     {
         readProjectsJsonDataFromStorage,
+        readLastUpdatedProjectJsonDataFromStorage,
         readProjectJsonDataFromStorage,
         saveProjectJsonDataToStorage,
         cleanStorage,
@@ -26,6 +27,18 @@ function readProjectsJsonDataFromStorage() {
   }).filter((data) => data !== null);
   return localStorageData;
 }
+function readLastUpdatedProjectJsonDataFromStorage() {
+  const projectsData = readProjectsJsonDataFromStorage();
+  if (!projectsData || projectsData.length === 0) {
+    return null;
+  }
+  const sortedProjects = projectsData.sort((a, b) => {
+    const dateA = new Date(a.meta.updated_at);
+    const dateB = new Date(b.meta.updated_at);
+    return dateB - dateA;
+  });
+  return sortedProjects[0];
+}
 function readProjectJsonDataFromStorage(title) {
   const projectKeys = Object.keys(localStorage);
   if (projectKeys.length === 0) {
@@ -42,6 +55,7 @@ function readProjectJsonDataFromStorage(title) {
 }
 
 function saveProjectJsonDataToStorage(jsonData) {
+  jsonData.meta.updated_at = new Date().toISOString();
   localStorage.setItem("todo_" + jsonData.meta.title, JSON.stringify(jsonData));
 }
 function cleanStorage() {
@@ -133,6 +147,7 @@ function addTimePickerToModal(type) {
 
 function createModal(headerText, headerContent, type) {
   const modal = document.createElement("dialog");
+  modal.id = `${type}-modal`;
   const modalHeader = document.createElement("div");
   modalHeader.classList.add("modal-header");
   modalHeader.innerHTML = `
@@ -204,7 +219,11 @@ function editTaskCase() {
         <option value="Low">Low</option>
       </select>
 
-      <button type="submit">Save Changes</button>
+      <div id="edit-task-buttons">
+          <button type="submit" class="save-changes-btn">Save Changes</button>
+          <button type="button" id="delete-task-btn" class="delete-group-btn">Delete Task</button>
+      </div>
+
     </form>
   `;
   return container;

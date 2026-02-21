@@ -1,6 +1,7 @@
 import { add, format } from "date-fns";
 import {
   readProjectsJsonDataFromStorage,
+  readLastUpdatedProjectJsonDataFromStorage,
   readProjectJsonDataFromStorage,
   saveProjectJsonDataToStorage,
   extractProjectFromJson,
@@ -92,38 +93,44 @@ function newTaskButtonClickHandler(group) {
 
   addTaskButton.addEventListener("click", () => {
     createModal("New Task", "Create a new task.", "new-task");
-    
+
     const form = document.querySelector(".modal-body form");
-        const addNotesButton = document.getElementById("add-notes-btn");
-        addNotesButton.addEventListener("click", () => {
-        const notesContainer = document.getElementById("task-notes-container");
-        const noteInput = document.createElement("input");
-        noteInput.type = "text";
-        noteInput.placeholder = "Enter a note";
-        noteInput.id = `task-note-${Date.now()}`;
-        notesContainer.appendChild(noteInput);
-      });
+    const addNotesButton = document.getElementById("add-notes-btn");
+    addNotesButton.addEventListener("click", () => {
+      const notesContainer = document.getElementById("task-notes-container");
+      const noteInput = document.createElement("input");
+      noteInput.type = "text";
+      noteInput.placeholder = "Enter a note";
+      noteInput.id = `task-note-${Date.now()}`;
+      notesContainer.appendChild(noteInput);
+    });
     form.addEventListener("submit", (event) => {
       event.preventDefault();
 
       const taskTitle = document.getElementById("task-title").value.trim();
-      const taskDescription = document.getElementById("task-description").value.trim();
+      const taskDescription = document
+        .getElementById("task-description")
+        .value.trim();
       const taskDueDate = document.getElementById("task-due-date").value;
       const taskDueTime = document.getElementById("task-due-time").value;
       const taskPriority = document.getElementById("task-priority").value;
 
-
-
       if (!taskTitle || !taskDueDate || !taskDueTime) {
         alert("Task title, due date, and due time are required.");
-        return; 
+        return;
       }
 
       const projectTitleElement = document.getElementById("project-title");
-      const projectJson = readProjectJsonDataFromStorage(projectTitleElement.textContent);
-      
+      const projectJson = readProjectJsonDataFromStorage(
+        projectTitleElement.textContent,
+      );
+
       const taskGroup = projectJson.task_groups.find((g) => g.id === group.id);
-      const taskNotes = Array.from(document.querySelectorAll("#task-notes-container input")).map(input => input.value.trim()).filter(note => note !== "");
+      const taskNotes = Array.from(
+        document.querySelectorAll("#task-notes-container input"),
+      )
+        .map((input) => input.value.trim())
+        .filter((note) => note !== "");
       if (taskGroup) {
         const newTask = {
           id: Date.now(),
@@ -135,7 +142,7 @@ function newTaskButtonClickHandler(group) {
           priority: taskPriority,
           completed: false,
         };
-        
+
         taskGroup.tasks.push(newTask);
         saveProjectJsonDataToStorage(projectJson);
 
@@ -151,178 +158,127 @@ function newTaskButtonClickHandler(group) {
       }
     });
   });
-  
+
   return addTaskButton;
 }
 
-function createTaskDetailsElement(group,task) {const taskElement = document.createElement("div");
-      taskElement.classList.add("task-details-container");
+function createTaskDetailsElement(group, task) {
+  const taskElement = document.createElement("div");
+  taskElement.classList.add("task-details-container");
 
-      const taskElementHeader = document.createElement("h3");
-      taskElementHeader.textContent = task.name;
-      taskElement.appendChild(taskElementHeader);
+  const taskElementHeader = document.createElement("h3");
+  taskElementHeader.textContent = task.name;
+  taskElement.appendChild(taskElementHeader);
 
-      const taskMetaContainer = document.createElement("div");
-      taskMetaContainer.classList.add("task-meta-container");
+  const taskMetaContainer = document.createElement("div");
+  taskMetaContainer.classList.add("task-meta-container");
 
-      const taskDescriptionContainer = document.createElement("div");
-      taskDescriptionContainer.classList.add("task-description-container");
-      const taskDescriptionHeader = document.createElement("h4");
-      taskDescriptionHeader.textContent = "Description:";
-      taskDescriptionContainer.appendChild(taskDescriptionHeader);
+  const taskDescriptionContainer = document.createElement("div");
+  taskDescriptionContainer.classList.add("task-description-container");
+  const taskDescriptionHeader = document.createElement("h4");
+  taskDescriptionHeader.textContent = "Description:";
+  taskDescriptionContainer.appendChild(taskDescriptionHeader);
 
-      const taskDescriptionContent = document.createElement("p");
-      taskDescriptionContent.textContent = task.description || "No description provided.";
-      taskDescriptionContainer.appendChild(taskDescriptionContent);
-      taskMetaContainer.appendChild(taskDescriptionContainer);
+  const taskDescriptionContent = document.createElement("p");
+  taskDescriptionContent.textContent =
+    task.description || "No description provided.";
+  taskDescriptionContainer.appendChild(taskDescriptionContent);
+  taskMetaContainer.appendChild(taskDescriptionContainer);
 
-      const taskDueDateContainer = document.createElement("div");
-      taskDueDateContainer.classList.add("task-due-date-container");
-      const taskDueDateHeader = document.createElement("h4");
-      taskDueDateHeader.textContent = "Due Date:";
-      taskDueDateContainer.appendChild(taskDueDateHeader);
+  const taskDueDateContainer = document.createElement("div");
+  taskDueDateContainer.classList.add("task-due-date-container");
+  const taskDueDateHeader = document.createElement("h4");
+  taskDueDateHeader.textContent = "Due Date:";
+  taskDueDateContainer.appendChild(taskDueDateHeader);
 
-      const taskDueDateContent = document.createElement("p");
-      taskDueDateContent.textContent = `${format(new Date(task.due_date), "d MMMM, yyyy")} at ${task.due_time}`;
-      taskDueDateContainer.appendChild(taskDueDateContent);
-      taskMetaContainer.appendChild(taskDueDateContainer);
+  const taskDueDateContent = document.createElement("p");
+  taskDueDateContent.textContent = `${format(new Date(task.due_date), "d MMMM, yyyy")} at ${task.due_time}`;
+  taskDueDateContainer.appendChild(taskDueDateContent);
+  taskMetaContainer.appendChild(taskDueDateContainer);
 
+  const taskPriorityContainer = document.createElement("div");
+  taskPriorityContainer.classList.add("task-priority-container");
+  const taskPriorityHeader = document.createElement("h4");
+  taskPriorityHeader.textContent = "Priority:";
+  taskPriorityContainer.appendChild(taskPriorityHeader);
 
-      const taskPriorityContainer = document.createElement("div");
-      taskPriorityContainer.classList.add("task-priority-container");
-      const taskPriorityHeader = document.createElement("h4");
-      taskPriorityHeader.textContent = "Priority:";
-      taskPriorityContainer.appendChild(taskPriorityHeader);
+  const taskPriorityContent = document.createElement("p");
+  taskPriorityContent.textContent = task.priority;
+  taskPriorityContainer.appendChild(taskPriorityContent);
+  taskMetaContainer.appendChild(taskPriorityContainer);
 
-      const taskPriorityContent = document.createElement("p");
-      taskPriorityContent.textContent = task.priority;
-      taskPriorityContainer.appendChild(taskPriorityContent);
-      taskMetaContainer.appendChild(taskPriorityContainer);
+  taskElement.appendChild(taskMetaContainer);
 
-      taskElement.appendChild(taskMetaContainer);
+  const taskNotesAndEditContainer = document.createElement("div");
+  taskNotesAndEditContainer.classList.add("task-notes-and-edit-container");
 
-      const taskNotesAndEditContainer = document.createElement("div");
-      taskNotesAndEditContainer.classList.add("task-notes-and-edit-container");
+  const taskNotesContainer = document.createElement("div");
+  taskNotesContainer.classList.add("task-notes-container");
 
-      const taskNotesContainer = document.createElement("div");
-      taskNotesContainer.classList.add("task-notes-container");
+  if (task.notes && task.notes.length > 0) {
+    const notesHeader = document.createElement("h4");
+    notesHeader.textContent = "Notes:";
+    taskNotesContainer.appendChild(notesHeader);
 
-      if (task.notes && task.notes.length > 0) {
-        
-        const notesHeader = document.createElement("h4");
-        notesHeader.textContent = "Notes:";
-        taskNotesContainer.appendChild(notesHeader);
-
-        const notesList = document.createElement("ul");
-        for (const note of task.notes) {
-          const noteItem = document.createElement("li");
-          noteItem.textContent = note;
-          notesList.appendChild(noteItem);
-        }
-        taskNotesContainer.appendChild(notesList);
-      }
-      const editTaskButton = document.createElement("button");
-      editTaskButton.textContent = "Edit Task";
-      editTaskButton.classList.add("edit-task-btn");
-
-      addEditTaskButtonListener(group,editTaskButton, task);
-
-
-      taskNotesAndEditContainer.appendChild(taskNotesContainer);
-      taskNotesAndEditContainer.appendChild(editTaskButton);
-      taskElement.appendChild(taskNotesAndEditContainer);
-      return taskElement;
+    const notesList = document.createElement("ul");
+    for (const note of task.notes) {
+      const noteItem = document.createElement("li");
+      noteItem.textContent = note;
+      notesList.appendChild(noteItem);
     }
+    taskNotesContainer.appendChild(notesList);
+  }
+  const editTaskButton = document.createElement("button");
+  editTaskButton.textContent = "Edit Task";
+  editTaskButton.classList.add("edit-task-btn");
 
+  addEditTaskButtonListener(group, editTaskButton, task);
 
-function addEditTaskButtonListener(group,editTaskButton, task) {
-
-        editTaskButton.addEventListener("click", () => {
-        createModal("Edit Task", "Edit the task details.", "edit-task");
-        const form = document.querySelector(".modal-body form");
-        const taskTitleInput = document.getElementById("edit-task-title");
-        const taskDescriptionInput = document.getElementById("edit-task-description");
-        const taskDueDateInput = document.getElementById("edit-task-due-date");
-        const taskDueTimeInput = document.getElementById("edit-task-due-time");
-        const taskPriorityInput = document.getElementById("edit-task-priority");
-        const addNotesButton = document.getElementById("edit-add-notes-btn");
-        const taskNotesContainer = document.getElementById("edit-task-notes-container");
-        
-        taskTitleInput.value = task.name;
-        taskDescriptionInput.value = task.description;
-        taskDueDateInput.value = task.due_date;
-        taskDueTimeInput.value = task.due_time;
-        taskPriorityInput.value = task.priority;
-        if (task.notes && task.notes.length > 0) {
-          for (const note of task.notes) {
-            const noteInput = document.createElement("input");
-            noteInput.type = "text";
-            noteInput.value = note;
-            taskNotesContainer.appendChild(noteInput);
-          }
-        }
-
-        addNotesButton.addEventListener("click", () => {
-          const noteInput = document.createElement("input");
-          noteInput.type = "text";
-          noteInput.placeholder = "Enter a note";
-          noteInput.id = `task-note-${Date.now()}`;
-          taskNotesContainer.appendChild(noteInput);
-      });
-        form.addEventListener("submit", (event) => {
-          event.preventDefault();
-
-          const updatedTaskTitle = taskTitleInput.value.trim();
-          const updatedTaskDescription = taskDescriptionInput.value.trim();
-          const updatedTaskDueDate = taskDueDateInput.value;
-          const updatedTaskDueTime = taskDueTimeInput.value;
-          const updatedTaskPriority = taskPriorityInput.value;
-          const updatedTaskNotes = Array.from(taskNotesContainer.querySelectorAll("input")).map(input => input.value.trim()).filter(note => note !== "");
-
-          if (!updatedTaskTitle || !updatedTaskDueDate || !updatedTaskDueTime) {
-            alert("Task title, due date, and due time are required.");
-            return; 
-          }
-
-          task.name = updatedTaskTitle;
-          task.description = updatedTaskDescription;
-          task.due_date = updatedTaskDueDate;
-          task.due_time = updatedTaskDueTime;
-          task.priority = updatedTaskPriority;
-          task.notes = updatedTaskNotes;
-
-          const projectTitleElement = document.getElementById("project-title");
-          const projectJson = readProjectJsonDataFromStorage(projectTitleElement.textContent);
-          const taskGroup = projectJson.task_groups.find((g) => g.id === group.id);
-          if (taskGroup) {
-            const taskIndex = taskGroup.tasks.findIndex((t) => t.id === task.id);
-            if (taskIndex !== -1) {
-              taskGroup.tasks[taskIndex] = task;
-              saveProjectJsonDataToStorage(projectJson);
-
-              const content = document.getElementById("content");
-              content.innerHTML = "";
-              fromProjectJsonToDom(projectJson);
-            } else {
-              alert("Task not found in the group.");
-            }
-          } else {
-            alert("Task group not found.");
-          }
-
-          const modal = form.closest("dialog");
-          modal.close();
-          modal.remove();
-        });
-    });
+  taskNotesAndEditContainer.appendChild(taskNotesContainer);
+  taskNotesAndEditContainer.appendChild(editTaskButton);
+  taskElement.appendChild(taskNotesAndEditContainer);
+  return taskElement;
 }
-function detailsButtonClickHandler(group) {
-  const detailsButton = document.createElement("button");
-  detailsButton.textContent = "Details";
-  detailsButton.classList.add("edit-group-btn");
 
-  
-  detailsButton.addEventListener("click", () => {
+function addDeleteTaskButtonListener(group, deleteTaskButton, task,form) {
+  deleteTaskButton.addEventListener("click", () => {
+    if (
+      confirm(
+        `Are you sure you want to delete the task "${task.name}"? This action cannot be undone.`,
+      )
+    ) {
+      const projectTitleElement = document.getElementById("project-title");
+      const projectJson = readProjectJsonDataFromStorage(
+        projectTitleElement.textContent,
+      );
+      const taskGroup = projectJson.task_groups.find((g) => g.id === group.id);
+      if (taskGroup) {
+        taskGroup.tasks = taskGroup.tasks.filter((t) => t.id !== task.id);
+        saveProjectJsonDataToStorage(projectJson);
+
+        const content = document.getElementById("content");
+        content.innerHTML = "";
+        fromProjectJsonToDom(projectJson);
+      } else {
+        alert("Task group not found.");
+      }
+
+        const modal = form.closest("dialog");
+        modal.close();
+        modal.remove();
+        
+
+        const editTaskGroupModal = document.getElementById("edit-task-group-modal");
+        if (editTaskGroupModal) {
+          editTaskGroupModal.close();
+          editTaskGroupModal.remove();
+        }
+        createTaskGroupDetailsElement(taskGroup);
+    }
+  });
+}
+
+function createTaskGroupDetailsElement(group) {
     createModal("Edit Task Group", "Edit the task group.", "edit-task-group");
     const modal = document.querySelector("dialog");
     const modalBody = modal.querySelector(".modal-body");
@@ -330,8 +286,141 @@ function detailsButtonClickHandler(group) {
       const taskElement = createTaskDetailsElement(group, task);
       modalBody.appendChild(taskElement);
     }
+    const deleteTaskgroupButton = document.createElement("button");
+    deleteTaskgroupButton.textContent = "Delete Task Group";
+    deleteTaskgroupButton.classList.add("delete-group-btn");
+    deleteTaskGroupButtonListener(group, deleteTaskgroupButton);
+    modalBody.appendChild(deleteTaskgroupButton);
+  }
+function addEditTaskButtonListener(group, editTaskButton, task) {
+  editTaskButton.addEventListener("click", () => {
+    createModal("Edit Task", "Edit the task details.", "edit-task");
+    const form = document.querySelector(".modal-body form");
+    const taskTitleInput = document.getElementById("edit-task-title");
+    const taskDescriptionInput = document.getElementById(
+      "edit-task-description",
+    );
+    const taskDueDateInput = document.getElementById("edit-task-due-date");
+    const taskDueTimeInput = document.getElementById("edit-task-due-time");
+    const taskPriorityInput = document.getElementById("edit-task-priority");
+    const addNotesButton = document.getElementById("edit-add-notes-btn");
+    const taskNotesContainer = document.getElementById(
+      "edit-task-notes-container",
+    );
+
+    const deleteTaskButton = document.getElementById("delete-task-btn");
+    addDeleteTaskButtonListener(group, deleteTaskButton, task, form);
+
+    taskTitleInput.value = task.name;
+    taskDescriptionInput.value = task.description;
+    taskDueDateInput.value = task.due_date;
+    taskDueTimeInput.value = task.due_time;
+    taskPriorityInput.value = task.priority;
+    if (task.notes && task.notes.length > 0) {
+      for (const note of task.notes) {
+        const noteInput = document.createElement("input");
+        noteInput.type = "text";
+        noteInput.value = note;
+        taskNotesContainer.appendChild(noteInput);
+      }
+    }
+
+    addNotesButton.addEventListener("click", () => {
+      const noteInput = document.createElement("input");
+      noteInput.type = "text";
+      noteInput.placeholder = "Enter a note";
+      noteInput.id = `task-note-${Date.now()}`;
+      taskNotesContainer.appendChild(noteInput);
+    });
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const updatedTaskTitle = taskTitleInput.value.trim();
+      const updatedTaskDescription = taskDescriptionInput.value.trim();
+      const updatedTaskDueDate = taskDueDateInput.value;
+      const updatedTaskDueTime = taskDueTimeInput.value;
+      const updatedTaskPriority = taskPriorityInput.value;
+      const updatedTaskNotes = Array.from(
+        taskNotesContainer.querySelectorAll("input"),
+      )
+        .map((input) => input.value.trim())
+        .filter((note) => note !== "");
+
+      if (!updatedTaskTitle || !updatedTaskDueDate || !updatedTaskDueTime) {
+        alert("Task title, due date, and due time are required.");
+        return;
+      }
+
+      task.name = updatedTaskTitle;
+      task.description = updatedTaskDescription;
+      task.due_date = updatedTaskDueDate;
+      task.due_time = updatedTaskDueTime;
+      task.priority = updatedTaskPriority;
+      task.notes = updatedTaskNotes;
+
+      const projectTitleElement = document.getElementById("project-title");
+      const projectJson = readProjectJsonDataFromStorage(
+        projectTitleElement.textContent,
+      );
+      const taskGroup = projectJson.task_groups.find((g) => g.id === group.id);
+      if (taskGroup) {
+        const taskIndex = taskGroup.tasks.findIndex((t) => t.id === task.id);
+        if (taskIndex !== -1) {
+          taskGroup.tasks[taskIndex] = task;
+          saveProjectJsonDataToStorage(projectJson);
+
+          const content = document.getElementById("content");
+          content.innerHTML = "";
+          fromProjectJsonToDom(projectJson);
+        } else {
+          alert("Task not found in the group.");
+        }
+      } else {
+        alert("Task group not found.");
+      }
+
+      const modal = form.closest("dialog");
+      modal.close();
+      modal.remove();
+    });
+  });
+}
+function detailsButtonClickHandler(group) {
+  const detailsButton = document.createElement("button");
+  detailsButton.textContent = "Details";
+  detailsButton.classList.add("edit-group-btn");
+
+  detailsButton.addEventListener("click", () => {
+    createTaskGroupDetailsElement(group);
   });
   return detailsButton;
+}
+
+function deleteTaskGroupButtonListener(group, deleteTaskgroupButton) {
+  deleteTaskgroupButton.addEventListener("click", () => {
+    if (
+      confirm(
+        `Are you sure you want to delete the task group "${group.name}"? This action cannot be undone.`,
+      )
+    ) {
+      const projectTitleElement = document.getElementById("project-title");
+      const projectJson = readProjectJsonDataFromStorage(
+        projectTitleElement.textContent,
+      );
+      projectJson.task_groups = projectJson.task_groups.filter(
+        (g) => g.id !== group.id,
+      );
+      saveProjectJsonDataToStorage(projectJson);
+
+      const content = document.getElementById("content");
+      content.innerHTML = "";
+      fromProjectJsonToDom(projectJson);
+
+      const modal = document.querySelector("dialog");
+      modal.close();
+      modal.remove();
+    }
+  });
 }
 
 function createProjectHeaderElement(
@@ -355,13 +444,63 @@ function createProjectHeaderElement(
   const projectHeader = document.createElement("div");
   projectHeader.id = "project-header";
 
+  const deleteProjectButton = document.createElement("button");
+  deleteProjectButton.textContent = "Delete Project";
+  deleteProjectButton.classList.add("delete-project-btn");
+  deleteProjectButton.addEventListener("click", () => {
+    if (
+      confirm(
+        `Are you sure you want to delete the project "${projectTitle}"? This action cannot be undone.`,
+      )
+    ) {
+      const projects = readProjectsJsonDataFromStorage();
+      const updatedProjects = projects.filter((p) => p.title !== projectTitle);
+      localStorage.removeItem("todo_" + projectTitle);
+
+      const content = document.getElementById("content");
+      content.innerHTML = "";
+      populateSidebar();
+
+      const modal = document.querySelector("dialog");
+      if (modal) {
+        modal.close();
+        modal.remove();
+      }
+      fromProjectJsonToDom(readLastUpdatedProjectJsonDataFromStorage());
+
+    }
+  });
+
+  projectHeader.appendChild(deleteProjectButton);
+
   projectHeader.appendChild(projectTitleElement);
   projectHeader.appendChild(projectDescriptionElement);
   projectHeader.appendChild(projectDueDateElement);
 
+  
+
   return projectHeader;
 }
+function addCheckboxListener(checkbox, task) {
+  checkbox.addEventListener("change", () => {
+    task.completed = checkbox.checked;
 
+    const projectTitleElement = document.getElementById("project-title");
+    const projectJson = readProjectJsonDataFromStorage(
+      projectTitleElement.textContent,
+    );
+    const taskGroup = projectJson.task_groups.find((g) =>
+      g.tasks.some((t) => t.id === task.id),
+    );
+    if (taskGroup) {
+      const taskIndex = taskGroup.tasks.findIndex((t) => t.id === task.id);
+      if (taskIndex !== -1) {
+        taskGroup.tasks[taskIndex] = task;
+        saveProjectJsonDataToStorage(projectJson);
+      }
+    }
+  });
+}
 function createTaskGroupElement(group) {
   const groupContainer = document.createElement("div");
   groupContainer.classList.add("task-group");
@@ -402,6 +541,7 @@ function createTaskGroupElement(group) {
     label.appendChild(checkbox);
     const span = document.createElement("span");
     span.classList.add("checkmark");
+    addCheckboxListener(checkbox, task);
 
     label.appendChild(span);
     label.appendChild(document.createTextNode(task.name));

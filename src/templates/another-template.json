@@ -4,6 +4,7 @@
     "description": "A standard template with four distinct phases for organizing a project.",
     "due_date": "2026-12-31",
     "due_time": "17:00",
+    "updated_at": "2026-02-28T12:00:00Z",
     "priority": "Medium"
   },
   "task_groups": [

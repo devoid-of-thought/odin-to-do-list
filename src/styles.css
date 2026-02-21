@@ -521,3 +521,46 @@ dialog #task-group-form input {
   justify-content: space-between;
   align-items: center;
 }
+
+#edit-task-buttons{
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+.save-changes-btn {
+  grid-column: 1/2;
+  width: 100%;
+}
+#delete-task-btn {
+  grid-column: 2/3;
+  background-color:red;
+  border-radius: 1rem;
+  width: auto;
+}
+
+#delete-task-btn:hover,
+.delete-group-btn:hover {
+  background-color: darkred;
+  color: var(--close-background-color);
+  transform: translateY(-5px);
+  box-shadow: 0 5px 10px rgba(255,0,0,0.3);
+}
+.delete-group-btn {
+  background-color: red;
+  color: var(--close-background-color);
+  padding: 0.5rem 1.2rem;
+  height: auto;
+  width: 20%;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+}
+
+.delete-project-btn {
+  background-color: red;
+  color: var(--close-background-color);
+  padding: 0.5rem 1.2rem;
+  height: auto;
+  width: max-content;
+justify-self: end;  
+font-size: 1rem;
+  border-radius: 0.5rem;
+}

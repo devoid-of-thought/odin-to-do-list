@@ -4,6 +4,7 @@
     "description": "A template for a to-do list application.",
     "due_date": "2026-03-01",
     "due_time": "12:00",
+    "updated_at": "2026-02-28T12:00:00Z",
     "priority": "High"
   },
   "task_groups": [
